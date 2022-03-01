@@ -1,6 +1,6 @@
 import { ActionFunction, Form, LoaderFunction, redirect, useActionData, useLoaderData, useTransition } from "remix";
 import invariant from "tiny-invariant";
-import { getPost, updatePost } from "~/post";
+import { getPost, getRawPost, updatePost } from "~/post";
 
 type PostError = {
   title?: boolean;
@@ -13,7 +13,7 @@ export const loader: LoaderFunction = async ({
 }) => {
   invariant(params.slug, "expected params.slug")
   console.log(params)
-  return getPost(params.slug);
+  return getRawPost(params.slug);
 }
 
 export const action: ActionFunction = async ({request}) => {
@@ -40,10 +40,11 @@ export const action: ActionFunction = async ({request}) => {
   return redirect("/admin");
 }
 
-export default function EditPost() {
+export default function EditPost() {    
   const post = useLoaderData();
   const errors = useActionData();
   const transition = useTransition();
+  console.log(post)
 
   return (
     <Form method="post">
@@ -69,7 +70,7 @@ export default function EditPost() {
           <em>Markdown is required</em>
         ) : null}
         <br />
-        <textarea id="markdown" rows={20} name="markdown" value={post.markdown}/>
+        <textarea id="markdown" rows={20} name="markdown" defaultValue={post.markdown} />
       </p>
       <input type="hidden" name="old_slug" value={post.slug} />
       <p>
