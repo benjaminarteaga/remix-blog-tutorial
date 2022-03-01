@@ -15,6 +15,13 @@ type NewPost = {
   markdown: string;
 }
 
+type ExistingPost = {
+  title: string;
+  slug: string;
+  markdown: string;
+  old_slug?: string;
+}
+
 export type PostMarkdownAttributes = {
   title: string;
 }
@@ -63,6 +70,19 @@ export async function getPost(slug: string) {
 
 export async function createPost(post: NewPost) {
   const md = `---\ntitle: ${post.title}\n---\n\n${post.markdown}`;
+  await fs.writeFile(
+    path.join(postsPath, post.slug + ".md"),
+    md
+  )
+  return getPost(post.slug);
+}
+
+export async function updatePost(post: ExistingPost) {
+  const md = `---\ntitle: ${post.title}\n---\n\n${post.markdown}`;
+  await fs.rename(
+    path.join(postsPath, post.old_slug + ".md"), 
+    path.join(postsPath, post.slug + ".md")
+  );
   await fs.writeFile(
     path.join(postsPath, post.slug + ".md"),
     md

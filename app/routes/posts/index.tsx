@@ -20,6 +20,9 @@ export default function Posts() {
           </li>
         ))}
       </ul>
+      <h4>
+        <a href="/admin">Admin</a>
+      </h4>
     </div>
   )
 }

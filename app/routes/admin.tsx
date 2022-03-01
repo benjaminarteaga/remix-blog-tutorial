@@ -20,12 +20,15 @@ export default function Admin() {
         <ul>
           {posts.map((post) => (
             <li key={post.slug}>
-              <Link to={`/posts/${post.slug}`}>
+              <Link to={`edit/${post.slug}`}>
                 {post.title}
               </Link>
             </li>
           ))}
         </ul>
+        <h4>
+          <a href="/posts">Back to posts</a>
+        </h4>
       </nav>
       <main>
         <Outlet />
